@@ -1,0 +1,22 @@
+version: "3.8" #Compose file format version
+
+services: #Define services of the application here
+  web:
+    build: . #Container will be built from the current directory
+    command: python manage.py runserver 0.0.0.0:8000 #Initialize development server on port 8000 of the container
+    volumes: 
+      - .:/code #Synchronize current directory with the code directory
+    ports:
+      - 8000:8000 #Map port 8000 of the container to port 8000 of the host machine
+    depends_on:
+      - db #Depend on the database service to start first
+  db:
+    image: postgres:13 # Use the postgres image with version 13 of the database server
+    environment:
+      - POSTGRES_USER=postgres #Set the user to postgres
+      - POSTGRES_PASSWORD=postgres #Set the password to postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/ #Persist the database data to the host machine
+
+volumes:
+  postgres_data:
